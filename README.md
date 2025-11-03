@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="modals/svgbanner.png" alt="Banner" width="1000"/>
+<img src="modals/svgbanner.png" alt="Banner" width="1050"/>
 
 </div>
 
