@@ -2,36 +2,7 @@
 
 <div align="center">
 
-<!-- SVG Banner with animated icons -->
-<svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <!-- Background -->
-  <rect width="800" height="200" fill="url(#grad1)"/>
-  
-  <!-- Sample SVG Icons -->
-  <g fill="white" opacity="0.2">
-    <!-- Heart icon -->
-    <path d="M100 80 C100 65, 120 65, 120 80 C120 65, 140 65, 140 80 C140 90, 120 110, 120 110 C120 110, 100 90, 100 80 Z"/>
-    <!-- Search icon -->
-    <circle cx="200" cy="85" r="15" fill="none" stroke="white" stroke-width="2"/>
-    <line x1="212" y1="97" x2="220" y2="105" stroke="white" stroke-width="2"/>
-    <!-- More icons... -->
-  </g>
-  
-  <!-- Title -->
-  <text x="400" y="100" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="white">
-    SVG Icon Showcase
-  </text>
-  <text x="400" y="130" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="white" opacity="0.8">
-    Modern • Responsive • Customizable
-  </text>
-</svg>
+<img src="modals/svgbanner.jpg" alt="Mobile View" width="600"/>
 
 **A modern, responsive web application for browsing, customizing, and managing SVG icons**
 
