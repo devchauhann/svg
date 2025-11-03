@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="modals/svgbanner.jpg" alt="Mobile View" width="600"/>
+<img src="modals/svgbanner.jpg" alt="Banner" width="600"/>
 
 **A modern, responsive web application for browsing, customizing, and managing SVG icons**
 
