@@ -4,6 +4,8 @@
 
 <img src="modals/svgbanner.jpg" alt="Banner" width="600"/>
 
+</div>
+
 **A modern, responsive web application for browsing, customizing, and managing SVG icons**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge)](https://devchauhann.github.io/svg/)
