@@ -1,4 +1,4 @@
-# 🎨 SVG Icon Showcase
+#  SVG Icon Showcase
 
 <div align="center">
 
