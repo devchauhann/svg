@@ -39,7 +39,7 @@
 <div align="center">
 
 ### Desktop View
-![Desktop Screenshot]<img src="modals/desktopview.jpg" alt="Mobile Menu" width="250"/>
+![Desktop Screenshot]<img src="modals/desktopview.jpg" alt="Mobile Menu" width="900"/>
 
 ### Mobile View & Features
 <div style="display: flex; gap: 20px; justify-content: center;">
