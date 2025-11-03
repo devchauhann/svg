@@ -39,13 +39,12 @@
 <div align="center">
 
 ### Desktop View
-![Desktop Screenshot](https://via.placeholder.com/600x400/667eea/ffffff?text=Desktop+View)
+![Desktop Screenshot]<img src="modals/desktopview.jpg" alt="Mobile Menu" width="250"/>
 
 ### Mobile View & Features
 <div style="display: flex; gap: 20px; justify-content: center;">
-<img src="https://via.placeholder.com/250x400/667eea/ffffff?text=Mobile+View" alt="Mobile View" width="250"/>
-<img src="https://via.placeholder.com/250x400/667eea/ffffff?text=Mobile+Menu" alt="Mobile Menu" width="250"/>
-<img src="https://via.placeholder.com/250x400/667eea/ffffff?text=Icon+Modal" alt="Icon Modal" width="250"/>
+<img src="modals/mobileview.jpg" alt="Mobile View" width="250"/>
+<img src="modals/menu.jpg" alt="Mobile Menu" width="250"/>
 </div>
 
 </div>
