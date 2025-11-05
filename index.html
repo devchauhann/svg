@@ -816,6 +816,143 @@
         opacity: 0.8;
       }
 
+      /* Search Dropdown */
+      .search-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        border: 2px solid var(--card-border);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px var(--shadow-medium);
+        max-height: 400px;
+        overflow-y: auto;
+        z-index: 1000;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      .search-dropdown.show {
+        display: block;
+        animation: dropdownFadeIn 0.2s ease-out;
+      }
+
+      @keyframes dropdownFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .search-dropdown-header {
+        padding: 1rem;
+        border-bottom: 1px solid var(--card-border);
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        background: var(--bg-secondary);
+      }
+
+      .search-result-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid var(--card-border);
+        transition: all 0.2s ease;
+      }
+
+      .search-result-item:last-child {
+        border-bottom: none;
+      }
+
+      .search-result-item:hover {
+        background: var(--bg-secondary);
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px var(--shadow-light);
+      }
+
+      .search-result-item:active {
+        transform: translateX(2px) scale(0.98);
+      }
+
+      .search-result-icon {
+        width: 32px;
+        height: 32px;
+        margin-right: 0.75rem;
+        padding: 6px;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .search-result-icon svg {
+        width: 20px;
+        height: 20px;
+        color: var(--text-color);
+      }
+
+      .search-result-info {
+        flex: 1;
+      }
+
+      .search-result-name {
+        font-weight: 500;
+        color: var(--text-color);
+        margin-bottom: 2px;
+      }
+
+      .search-result-category {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        text-transform: capitalize;
+      }
+
+      .search-no-results {
+        padding: 2rem 1rem;
+        text-align: center;
+        color: var(--text-secondary);
+      }
+
+      .search-no-results svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      /* Mobile responsive search dropdown */
+      @media (max-width: 768px) {
+        .search-dropdown {
+          left: -1rem;
+          right: -1rem;
+          margin-top: 0.25rem;
+          border-radius: 8px;
+          max-height: 300px;
+        }
+
+        .search-result-item {
+          padding: 1rem;
+        }
+
+        .search-result-icon {
+          width: 36px;
+          height: 36px;
+          margin-right: 1rem;
+        }
+
+        .search-result-icon svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
       /* Header Actions */
       .header-actions {
         display: flex;
@@ -1886,6 +2023,7 @@
                 type="search"
                 id="search-bar"
                 placeholder="Search 1,500+ icons..."
+                autocomplete="off"
               />
               <svg
                 class="search-icon"
@@ -1902,6 +2040,19 @@
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
               </svg>
+
+              <!-- Search Dropdown -->
+              <div class="search-dropdown" id="search-dropdown">
+                <div class="search-dropdown-header">
+                  <span id="search-results-count">Search for icons...</span>
+                </div>
+                <div
+                  class="search-dropdown-content"
+                  id="search-dropdown-content"
+                >
+                  <!-- Search results will be populated here -->
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2819,6 +2970,18 @@
           // Update state and re-render
           currentCategory = e.target.dataset.category;
           renderIcons();
+
+          // Scroll to icon grid section to show filtered results
+          setTimeout(() => {
+            const iconGridWrapper =
+              document.getElementById("icon-grid-wrapper");
+            if (iconGridWrapper) {
+              iconGridWrapper.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+          }, 100);
         }
 
         // --- 2.5 Icon Rendering ---
@@ -3078,11 +3241,170 @@
           }, 2000);
         });
 
-        // --- 2.9 General Event Listeners ---
+        // --- 2.9 Search Dropdown Functionality ---
+        const searchDropdown = document.getElementById("search-dropdown");
+        const searchDropdownContent = document.getElementById(
+          "search-dropdown-content"
+        );
+        const searchResultsCount = document.getElementById(
+          "search-results-count"
+        );
+        let searchTimeout;
+
+        // Real-time search with dropdown
         searchBar.addEventListener("input", (e) => {
-          currentFilter = e.target.value.toLowerCase().trim();
-          renderIcons();
+          const searchValue = e.target.value.toLowerCase().trim();
+          currentFilter = searchValue;
+
+          // Clear previous timeout
+          clearTimeout(searchTimeout);
+
+          if (searchValue.length > 0) {
+            // Show dropdown and update results
+            showSearchDropdown();
+            updateSearchResults(searchValue);
+
+            // Also update the main grid with a small delay
+            searchTimeout = setTimeout(() => {
+              renderIcons();
+            }, 300);
+          } else {
+            // Hide dropdown and reset grid to show all icons
+            hideSearchDropdown();
+            currentFilter = "";
+            renderIcons();
+          }
         });
+
+        // Handle search dropdown item clicks
+        function handleSearchItemClick(iconData) {
+          // Hide dropdown
+          hideSearchDropdown();
+
+          // Set search to find this specific icon
+          searchBar.value = iconData.name;
+          currentFilter = iconData.name.toLowerCase();
+
+          // Update grid to show the filtered results
+          renderIcons();
+
+          // Scroll to icon grid section and then open the icon modal
+          setTimeout(() => {
+            const iconGridWrapper =
+              document.getElementById("icon-grid-wrapper");
+            if (iconGridWrapper) {
+              iconGridWrapper.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+
+              // After scrolling, wait a bit and then auto-open the icon modal
+              setTimeout(() => {
+                // Find the rendered icon element and trigger its click
+                const iconElements = document.querySelectorAll(".icon-card");
+                const targetIcon = Array.from(iconElements).find((el) => {
+                  const iconName = el.querySelector("span")?.textContent;
+                  return iconName === iconData.name;
+                });
+
+                if (targetIcon) {
+                  // Highlight the selected icon briefly
+                  targetIcon.style.transform = "scale(1.05)";
+                  targetIcon.style.boxShadow =
+                    "0 8px 32px rgba(0, 123, 255, 0.3)";
+                  targetIcon.style.transition = "all 0.3s ease";
+
+                  // Auto-open the modal after highlighting
+                  setTimeout(() => {
+                    targetIcon.click();
+                    // Reset highlighting
+                    setTimeout(() => {
+                      targetIcon.style.transform = "";
+                      targetIcon.style.boxShadow = "";
+                    }, 100);
+                  }, 400);
+                }
+              }, 600);
+            }
+          }, 100);
+        }
+
+        // Make function globally accessible
+        window.handleSearchItemClick = handleSearchItemClick;
+
+        // Show search dropdown
+        function showSearchDropdown() {
+          searchDropdown.classList.add("show");
+        }
+
+        // Hide search dropdown
+        function hideSearchDropdown() {
+          searchDropdown.classList.remove("show");
+        }
+
+        // Update search results in dropdown
+        function updateSearchResults(searchValue) {
+          const filteredResults = iconDatabase.icons
+            .filter((icon) => icon.name.toLowerCase().includes(searchValue))
+            .slice(0, 8); // Limit to 8 results
+
+          searchResultsCount.textContent =
+            filteredResults.length > 0
+              ? `Found ${filteredResults.length}${
+                  filteredResults.length === 8 ? "+" : ""
+                } results • Click to view details`
+              : "No results found";
+
+          if (filteredResults.length === 0) {
+            searchDropdownContent.innerHTML = `
+              <div class="search-no-results">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <div>No icons found for "${searchValue}"</div>
+              </div>
+            `;
+            return;
+          }
+
+          searchDropdownContent.innerHTML = filteredResults
+            .map(
+              (icon) => `
+            <div class="search-result-item" onclick="handleSearchItemClick(${JSON.stringify(
+              icon
+            ).replace(/"/g, "&quot;")})">
+              <div class="search-result-icon">
+                ${icon.svg}
+              </div>
+              <div class="search-result-info">
+                <div class="search-result-name">${icon.name}</div>
+                <div class="search-result-category">${icon.category}</div>
+              </div>
+            </div>
+          `
+            )
+            .join("");
+        }
+
+        // Hide dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+          if (
+            !searchBar.contains(e.target) &&
+            !searchDropdown.contains(e.target)
+          ) {
+            hideSearchDropdown();
+          }
+        });
+
+        // Hide dropdown on escape key
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            hideSearchDropdown();
+          }
+        });
+
+        // --- 2.10 General Event Listeners ---
 
         closeModalBtn.addEventListener("click", closeModal);
         // Close modal by clicking overlay
@@ -3291,10 +3613,17 @@
                 filterIcons(category);
                 // Close menu after selection
                 closeMobileMenu();
-                // Scroll to icons section
-                document
-                  .getElementById("category-tabs")
-                  .scrollIntoView({ behavior: "smooth" });
+                // Scroll to browse section to show filtered results
+                setTimeout(() => {
+                  const iconGridWrapper =
+                    document.getElementById("icon-grid-wrapper");
+                  if (iconGridWrapper) {
+                    iconGridWrapper.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }
+                }, 100);
               });
             });
 
@@ -3355,14 +3684,8 @@
                 mobileSearchBtn.style.transform = "scale(1)";
               }, 150);
 
-              // Focus on the main search bar (if visible) or show search modal
-              const searchBar = document.getElementById("search-bar");
-              if (searchBar && window.innerWidth > 768) {
-                searchBar.focus();
-              } else {
-                // Create a simple search overlay for mobile
-                createMobileSearchOverlay();
-              }
+              // Always create mobile search overlay when mobile search button is clicked
+              createMobileSearchOverlay();
             });
           }
 
@@ -3441,12 +3764,62 @@
             // Focus on input
             setTimeout(() => searchInput.focus(), 100);
 
-            // Handle search input
+            // Handle search input with real-time sync
+            let searchTimeout;
             searchInput.addEventListener("input", (e) => {
+              const searchValue = e.target.value;
               const mainSearchBar = document.getElementById("search-bar");
+
               if (mainSearchBar) {
-                mainSearchBar.value = e.target.value;
-                mainSearchBar.dispatchEvent(new Event("input"));
+                // Update main search bar value immediately
+                mainSearchBar.value = searchValue;
+
+                // Trigger search functionality immediately
+                const inputEvent = new Event("input", { bubbles: true });
+                mainSearchBar.dispatchEvent(inputEvent);
+
+                // Clear previous timeout
+                clearTimeout(searchTimeout);
+
+                // If user typed something, set timeout to close overlay and scroll
+                if (searchValue.trim().length > 0) {
+                  searchTimeout = setTimeout(() => {
+                    closeOverlay();
+                    // Scroll to results after overlay closes
+                    setTimeout(() => {
+                      const iconGridWrapper =
+                        document.getElementById("icon-grid-wrapper");
+                      if (iconGridWrapper) {
+                        iconGridWrapper.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        });
+                      }
+                    }, 100);
+                  }, 1000); // Wait 1 second after user stops typing
+                }
+              }
+            });
+
+            // Handle enter key to search and close overlay immediately
+            searchInput.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") {
+                const searchValue = e.target.value.trim();
+                if (searchValue.length > 0) {
+                  clearTimeout(searchTimeout); // Clear the delayed close
+                  closeOverlay();
+                  // Small delay to ensure overlay is closed before scrolling
+                  setTimeout(() => {
+                    const iconGridWrapper =
+                      document.getElementById("icon-grid-wrapper");
+                    if (iconGridWrapper) {
+                      iconGridWrapper.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }
+                  }, 100);
+                }
               }
             });
 
@@ -3594,11 +3967,7 @@
 
         <div class="footer-bottom">
           <p>
-            &copy; 2024 SVG Icon Showcase. All rights reserved. Built with ❤️
-            for developers.
-          </p>
-          <p class="footer-tech">
-            Powered by vanilla JavaScript • No dependencies • Open source
+            &copy; 2024 SVG Icon Showcase. 
           </p>
         </div>
       </div>
