@@ -230,7 +230,7 @@ copies of the Software...
 
 Need help? Here are your options:
 
-- 📧 **Email**: [dev.chauhan@example.com](mailto:devgurjar9897@gmail.com)
+- 📧 **Email**: [devgurjar9897@gmail.com](mailto:devgurjar9897@gmail.com)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/devchauhann/svg-icon-showcase/discussions)
 - 🐛 **Issues**: [GitHub Issues](https://github.com/devchauhann/svg-icon-showcase/issues)
 - 📱 **Social**: Follow [@devchauhann](https://twitter.com/devchauhann3) for updates
