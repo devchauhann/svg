@@ -577,7 +577,7 @@
       /* 3. Filter Section */
       /*-----------------------------------*/
       .filter-section {
-        padding: 3rem 0 1.5rem;
+        padding: 3rem 0 1rem;
       }
 
       .section-header {
@@ -599,6 +599,28 @@
         max-width: 600px;
         margin: 0 auto;
         font-weight: 400;
+      }
+
+      /* Search Results Section */
+      .search-results-section {
+        padding: 2rem 0 1.5rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color-alpha) 0%,
+          transparent 100%
+        );
+        border-radius: 16px;
+        margin-bottom: 2rem;
+      }
+
+      .search-results-section .section-header h2 {
+        color: var(--primary-color);
+        font-size: 2rem;
+      }
+
+      .search-results-section .section-header p {
+        color: var(--text-color);
+        opacity: 0.9;
       }
 
       /*-----------------------------------*/
@@ -645,20 +667,27 @@
       }
 
       .brand-logo {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, var(--primary-color), #6f42c1);
-        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 1.1rem;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
         transition: all 0.3s ease;
         position: relative;
-        overflow: hidden;
+      }
+
+      .brand-image {
+        height: 70px;
+        width: auto;
+        transition: all 0.3s ease;
+        filter: brightness(0) contrast(1);
+      }
+
+      /* Theme-aware image filtering - Black in light, White in dark */
+      html[data-theme="dark"] .brand-image {
+        filter: brightness(0) invert(1) contrast(1);
+      }
+
+      html[data-theme="light"] .brand-image {
+        filter: brightness(0) contrast(1);
       }
 
       .brand-logo::before {
@@ -681,12 +710,18 @@
 
       .header-brand:hover .brand-logo {
         transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
       }
 
-      .header-brand:hover .brand-logo::before {
-        opacity: 1;
-        animation: shine 0.6s ease-in-out;
+      .header-brand:hover .brand-image {
+        transform: scale(1.1);
+      }
+
+      html[data-theme="light"] .header-brand:hover .brand-image {
+        filter: brightness(0) contrast(1.2);
+      }
+
+      html[data-theme="dark"] .header-brand:hover .brand-image {
+        filter: brightness(0) invert(1) contrast(1.2);
       }
 
       @keyframes shine {
@@ -698,72 +733,11 @@
         }
       }
 
-      .brand-text {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .brand-title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--primary-color), #6f42c1);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin: 0;
-        line-height: 1.2;
-      }
-
-      .brand-subtitle {
-        font-size: 0.75rem;
-        color: var(--text-color);
-        opacity: 0.6;
-        font-weight: 500;
-        margin-top: -2px;
-        letter-spacing: 0.5px;
-      }
-
       /* Navigation Menu */
       .header-nav {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-      }
-
-      .nav-link {
-        padding: 0.5rem 1rem;
-        color: var(--text-color);
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.9rem;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        position: relative;
-        opacity: 0.8;
-      }
-
-      .nav-link:hover {
-        opacity: 1;
-        background: var(--card-hover-bg);
-        transform: translateY(-1px);
-      }
-
-      .nav-link.active {
-        color: var(--primary-color);
-        opacity: 1;
-      }
-
-      .nav-link.active::after {
-        content: "";
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 4px;
-        height: 4px;
-        background: var(--primary-color);
-        border-radius: 50%;
+        gap: 1.5rem;
       }
 
       /* Enhanced Search Bar */
@@ -1089,16 +1063,8 @@
           flex-shrink: 0;
         }
 
-        .brand-text {
-          display: block;
-        }
-
-        .brand-title {
-          font-size: 1.1rem;
-        }
-
-        .brand-subtitle {
-          font-size: 0.7rem;
+        .brand-image {
+          height: 48px;
         }
 
         .header-nav {
@@ -1367,8 +1333,8 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0.75rem;
-        margin: 2rem 1.5rem 1rem;
+        gap: 1.25rem;
+        margin: 1.5rem 1.5rem 1rem;
       }
 
       .tab-button {
@@ -1399,7 +1365,7 @@
         display: grid;
         /* Responsive grid: min 120px wide, max 1fr. Fills space. */
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 1.25rem;
+        gap: 1.1rem;
       }
 
       .icon-card {
@@ -1408,8 +1374,8 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 1.5rem 1rem;
-        height: 140px;
+        padding: 1rem 0.75rem;
+        height: 120px;
         border-radius: 12px;
         background-color: var(--card-bg);
         border: 1px solid var(--card-border);
@@ -1986,35 +1952,15 @@
           <!-- Brand/Logo -->
           <a href="#" class="header-brand">
             <div class="brand-logo">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                ></path>
-              </svg>
-            </div>
-            <div class="brand-text">
-              <h1 class="brand-title">SVG Showcase</h1>
-              <span class="brand-subtitle">Premium Icons</span>
+              <img
+                src="svg.png"
+                alt="SVG Showcase Logo"
+                class="brand-image"
+                width="auto"
+                height="32"
+              />
             </div>
           </a>
-
-          <!-- Navigation Menu -->
-          <nav class="header-nav">
-            <a href="#" class="nav-link active">Home</a>
-            <a href="#category-tabs" class="nav-link">Browse</a>
-            <a href="#" class="nav-link">Collections</a>
-            <a href="#" class="nav-link">About</a>
-          </nav>
 
           <!-- Search Bar -->
           <div class="header-search">
@@ -2077,48 +2023,6 @@
               >
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
-              </svg>
-            </button>
-
-            <!-- Favorites Button -->
-            <button class="action-button" id="favorites-btn" title="Favorites">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                ></path>
-              </svg>
-            </button>
-
-            <!-- Download Button -->
-            <button
-              class="action-button"
-              id="download-btn"
-              title="Download Pack"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
             </button>
 
@@ -2749,11 +2653,25 @@
 
     <main class="container">
       <!-- Search and Filter Section -->
-      <section class="filter-section">
+      <section class="filter-section" id="browse-section">
         <div class="section-header">
           <h2>Browse Icons</h2>
           <p>
             Search through our comprehensive collection or browse by category
+          </p>
+        </div>
+      </section>
+
+      <!-- Search Results Section -->
+      <section
+        class="search-results-section"
+        id="search-results-section"
+        style="display: none"
+      >
+        <div class="section-header">
+          <h2 id="search-results-title">Search Results</h2>
+          <p id="search-results-subtitle">
+            Found matching icons for your search
           </p>
         </div>
       </section>
@@ -2959,6 +2877,12 @@
         }
 
         function handleCategoryClick(e) {
+          // Clear search and show browse mode
+          searchBar.value = "";
+          currentFilter = "";
+          hideSearchDropdown();
+          showBrowseMode();
+
           // Remove active class from all
           document
             .querySelectorAll("#category-tabs .tab-button")
@@ -3260,6 +3184,9 @@
           clearTimeout(searchTimeout);
 
           if (searchValue.length > 0) {
+            // Show search mode
+            showSearchMode(searchValue);
+
             // Show dropdown and update results
             showSearchDropdown();
             updateSearchResults(searchValue);
@@ -3267,9 +3194,11 @@
             // Also update the main grid with a small delay
             searchTimeout = setTimeout(() => {
               renderIcons();
+              updateSearchResultsDisplay();
             }, 300);
           } else {
-            // Hide dropdown and reset grid to show all icons
+            // Hide search mode and show browse mode
+            showBrowseMode();
             hideSearchDropdown();
             currentFilter = "";
             renderIcons();
@@ -3285,8 +3214,10 @@
           searchBar.value = iconData.name;
           currentFilter = iconData.name.toLowerCase();
 
-          // Update grid to show the filtered results
+          // Show search mode and update grid to show the filtered results
+          showSearchMode(iconData.name);
           renderIcons();
+          updateSearchResultsDisplay();
 
           // Scroll to icon grid section and then open the icon modal
           setTimeout(() => {
@@ -3340,6 +3271,58 @@
         // Hide search dropdown
         function hideSearchDropdown() {
           searchDropdown.classList.remove("show");
+        }
+
+        // Show search mode - hide browse elements, show search results
+        function showSearchMode(searchValue) {
+          const browseSection = document.getElementById("browse-section");
+          const categoryTabs = document.getElementById("category-tabs");
+          const searchResultsSection = document.getElementById(
+            "search-results-section"
+          );
+
+          if (browseSection) browseSection.style.display = "none";
+          if (categoryTabs) categoryTabs.style.display = "none";
+          if (searchResultsSection)
+            searchResultsSection.style.display = "block";
+        }
+
+        // Show browse mode - show browse elements, hide search results
+        function showBrowseMode() {
+          const browseSection = document.getElementById("browse-section");
+          const categoryTabs = document.getElementById("category-tabs");
+          const searchResultsSection = document.getElementById(
+            "search-results-section"
+          );
+
+          if (browseSection) browseSection.style.display = "block";
+          if (categoryTabs) categoryTabs.style.display = "block";
+          if (searchResultsSection) searchResultsSection.style.display = "none";
+        }
+
+        // Update search results display with count
+        function updateSearchResultsDisplay() {
+          const resultsCount = filteredIcons.length;
+          const searchResultsTitle = document.getElementById(
+            "search-results-title"
+          );
+          const searchResultsSubtitle = document.getElementById(
+            "search-results-subtitle"
+          );
+
+          if (searchResultsTitle && searchResultsSubtitle) {
+            if (resultsCount === 0) {
+              searchResultsTitle.textContent = "No Results Found";
+              searchResultsSubtitle.textContent = `No icons match your search "${currentFilter}". Try different keywords.`;
+            } else {
+              searchResultsTitle.textContent = `${resultsCount} Result${
+                resultsCount === 1 ? "" : "s"
+              } Found`;
+              searchResultsSubtitle.textContent = `Found ${resultsCount} icon${
+                resultsCount === 1 ? "" : "s"
+              } matching "${currentFilter}"`;
+            }
+          }
         }
 
         // Update search results in dropdown
@@ -3442,9 +3425,6 @@
         // --- 2.11 Enhanced Header Features ---
         function initHeaderFeatures() {
           const header = document.getElementById("main-header");
-          const navLinks = document.querySelectorAll(".nav-link");
-          const favoritesBtn = document.getElementById("favorites-btn");
-          const downloadBtn = document.getElementById("download-btn");
           const mobileMenuBtn = document.getElementById("mobile-menu-btn");
           const mobileSearchBtn = document.getElementById("mobile-search-btn");
 
@@ -3464,86 +3444,6 @@
           }
 
           window.addEventListener("scroll", handleScroll, { passive: true });
-
-          // Navigation smooth scrolling
-          navLinks.forEach((link) => {
-            link.addEventListener("click", (e) => {
-              e.preventDefault();
-
-              // Update active state
-              navLinks.forEach((l) => l.classList.remove("active"));
-              link.classList.add("active");
-
-              // Smooth scroll to section
-              const href = link.getAttribute("href");
-              if (href.startsWith("#")) {
-                const target = document.querySelector(href);
-                if (target) {
-                  target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }
-              }
-            });
-          });
-
-          // Favorites functionality
-          if (favoritesBtn) {
-            let isFavorited = false;
-            favoritesBtn.addEventListener("click", () => {
-              isFavorited = !isFavorited;
-              favoritesBtn.style.color = isFavorited ? "#dc3545" : "";
-              favoritesBtn.title = isFavorited
-                ? "Remove from Favorites"
-                : "Add to Favorites";
-
-              // Add animation
-              favoritesBtn.style.transform = "scale(0.8)";
-              setTimeout(() => {
-                favoritesBtn.style.transform = "scale(1)";
-              }, 150);
-            });
-          }
-
-          // Download functionality
-          if (downloadBtn) {
-            downloadBtn.addEventListener("click", () => {
-              // Add download animation
-              downloadBtn.style.transform = "scale(0.9)";
-              setTimeout(() => {
-                downloadBtn.style.transform = "scale(1)";
-              }, 150);
-
-              // Simulate download (you can replace with actual download logic)
-              const notification = document.createElement("div");
-              notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: var(--primary-color);
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                z-index: 1000;
-                font-size: 0.9rem;
-                box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-              `;
-              notification.textContent = "Download started! 📦";
-              document.body.appendChild(notification);
-
-              setTimeout(() => {
-                notification.style.transform = "translateX(0)";
-              }, 100);
-
-              setTimeout(() => {
-                notification.style.transform = "translateX(100%)";
-                setTimeout(() => notification.remove(), 300);
-              }, 3000);
-            });
-          }
 
           // Mobile menu functionality
           const mobileMenuOverlay = document.getElementById(
@@ -3867,6 +3767,9 @@
           updateHeroStats();
           createCategoryTabs();
           renderIcons();
+
+          // Initialize in browse mode
+          showBrowseMode();
         }
 
         // Only initialize if icon data was successfully loaded
@@ -3967,7 +3870,11 @@
 
         <div class="footer-bottom">
           <p>
-            &copy; 2024 SVG Icon Showcase. 
+            &copy; 2024 SVG Icon Showcase. All rights reserved. Built with ❤️
+            for developers.
+          </p>
+          <p class="footer-tech">
+            Powered by vanilla JavaScript • No dependencies • Open source
           </p>
         </div>
       </div>
